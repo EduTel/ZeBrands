@@ -1,0 +1,129 @@
+#nota
+# no confirmo los correos
+
+# forma de padsar un token por header
+#{
+#	"Authorization": "JWT <Token>"
+#}
+
+query name_query_userLogin{
+  me {
+    username,
+  }
+}
+query name_query_user__all{
+  users{
+    id,
+    email,
+    username,
+  }
+}
+# aqui puedecrear un usuario que le regresara un token
+mutation name_query_register{
+  register(
+    email: "new_user@email.com",
+    username: "new_user",
+    password1: "123456super",
+    password2: "123456super",
+  ) {
+    success,
+    errors,
+    token
+  }
+}
+# con esta funcion solo obtiene el token
+mutation name_query_gettokenAuth{
+  tokenAuth(
+    # username or email
+    email: "new_user@email.com",
+    password: "123456super",
+  ) {
+    success
+    errors
+    user{
+      email
+    }
+    token
+  }
+}
+query name_query_products__all{
+    products{
+      ..._ProductType
+    }
+}
+query name_query_products__id{
+    products(id: 1){
+      ..._ProductType
+    }
+}
+# en el strTimes se guarda el numero de veces que se ha visto un producto
+query name_query_productsView__all{
+    productsviews{
+      ..._ViewType
+    }
+}
+query name_query_categories_all{
+  categories{
+    ..._CategoryType
+  }
+}
+query name_query_categories_id{
+  categories(id: 1){
+    ..._CategoryType
+  }
+}
+query name_query_categories_name{
+  categories(name: "category 2"){
+    ..._CategoryType
+  }
+}
+
+mutation name_query_products_add {
+  addProducts(strName:"producto4", objCategoria: 2, strPrice: "100", strSku: "004"){
+    product{
+      ..._ProductType
+    }
+  }
+}
+mutation name_query_products_update {
+  updateProducts(id: 4, strName:"producto4 :)"){
+    product{
+      ..._ProductType
+    }
+  }
+}
+
+mutation name_query_products_delete {
+  deleteProducts(id: 3){
+    product{
+      ..._ProductType
+    }
+  }
+}
+
+fragment _ProductType on ProductType {
+    id
+    strSku
+    strName
+    strPrice
+    objCategoria{
+        ..._CategoryType
+    }
+    #createdAt
+    #updatedAt 
+}
+fragment _CategoryType on CategoryType {
+    id
+  	strNombre
+    #createdAt
+    #updatedAt 
+}
+fragment _ViewType on ViewType {
+    id
+  	objProducts{
+      ..._ProductType
+    }
+  	strTimes
+    #createdAt
+    #updatedAt 
+}
